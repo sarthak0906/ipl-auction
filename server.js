@@ -90,7 +90,7 @@ app.get('/populate', (req, res) => {
                     "bowler": req.query.bowler,
                     "batting": req.query.batting,
                     "wk" : req.query.wk,
-                    "team_bidding": null,
+                    "team_bidding": "null",
                     "image": req.query.image}
         dbo.collection("ipl").insertOne(item, (err, res) => {
             if (err){
