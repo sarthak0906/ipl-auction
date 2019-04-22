@@ -40,12 +40,13 @@ app.get("/bid",(req,res)=>{
             {"_id": req.query.id},
             { $inc: {"current_bid" : 500000} }
             );
-            dbo.collection("ipl").findOneAndUpdate(
-                {"_id": req.query.id},
-                { $set: {"team_bidding" : req.query.name} }
-                );
-            });
-        });
+        dbo.collection("ipl").findOneAndUpdate(
+            {"_id": req.query.id},
+            { $set: {"team_bidding" : req.query.name} }
+        );
+    });
+    res,send("success");
+});
         
 app.get('/send', (req,res) => {
     app.use(cors());
@@ -96,6 +97,7 @@ app.get('/populate', (req, res) => {
                 res.send("failed");
             }
             console.log("amazing");
+            res.send("success");
         });
     });
 })
