@@ -38,12 +38,13 @@ app.get("/bid",(req,res)=>{
         
         dbo.collection("ipl").findOneAndUpdate(
             {"name": req.query.name},
-            { $inc: {"current_bid" : 500000} }
-            );
-        dbo.collection("ipl").findOneAndUpdate(
-            {"_id": req.query.id},
-            { $set: {"team_bidding" : req.query.team_name} }
+            { $inc: {"current_bid" : 500000} },
         );
+        dbo.collection("ipl").findOneAndUpdate(
+            {"name": req.query.name},
+            { $set: {"team_bidding" : req.query.team_name} }, 
+        );
+        console.log(req.query.team_name);
     });
     res.send("success");
 });
