@@ -82,8 +82,7 @@ app.get('/populate', (req, res) => {
         var dbo = database.db(db.DB_NAME);
         require('./app/routes') (app, database);
         
-        var item = {"id" : req.query.id,
-                    "name": req.query.name,
+        var item = {"name": req.query.name,
                     "nationality": req.query.nationality,
                     "current_bid": parseInt(req.query.current_bid),
                     "base_price": req.query.base_price,
