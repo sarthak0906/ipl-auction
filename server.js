@@ -9,13 +9,6 @@ var cors             = require('cors');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-// MongoClient.connect(db.url, {useNewUrlParser: true}, (err, client) =>{
-//     if (err) return console.log(err)
-
-//     database   = client.db(db.DB_NAME);
-//     collection = database.collection("ipl");
-//     console.log("connected to database   : " + db.DB_NAME);
-// })
 
 MongoClient.connect( db.url , (err, database) => {
     if (err) return console.log(err);
@@ -31,8 +24,9 @@ app.listen(port, () =>{
 });
 
 app.get("/bid",(req,res)=>{
+    app.use(cors());
     console.log(req.query);
-
+    
     MongoClient.connect(db.url, (err,database) => {
         if (err){
             console.log(err);
@@ -45,15 +39,16 @@ app.get("/bid",(req,res)=>{
         dbo.collection("ipl").findOneAndUpdate(
             {"_id": req.query.id},
             { $inc: {"current_bid" : 500000} }
-        );
-        dbo.collection("ipl").findOneAndUpdate(
-            {"_id": req.query.id},
-            { $set: {"team_bidding" : req.query.name} }
-        );
-    });
-});
-
+            );
+            dbo.collection("ipl").findOneAndUpdate(
+                {"_id": req.query.id},
+                { $set: {"team_bidding" : req.query.name} }
+                );
+            });
+        });
+        
 app.get('/send', (req,res) => {
+    app.use(cors());
     MongoClient.connect(db.url, (err,database) => {
         if (err){
             console.log(err);
@@ -76,6 +71,7 @@ app.get('/send', (req,res) => {
 
 
 app.get('/populate', (req, res) => {
+    app.use(cors());
     MongoClient.connect(db.url, (err,database) => {
         if (err){
             console.log(err);
