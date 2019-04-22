@@ -5,8 +5,10 @@ const db             = require('./config/db');
 const port           = process.env.PORT || 3000;
 const app            = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+var cors             = require('cors');
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 // MongoClient.connect(db.url, {useNewUrlParser: true}, (err, client) =>{
 //     if (err) return console.log(err)
 
@@ -50,21 +52,6 @@ app.get("/bid",(req,res)=>{
         );
     });
 });
-
-app.get('/batsman', (req,res) => {
-    MongoClient.connect(db.url, (err,database) => {
-        if (err){
-            console.log(err);
-            res.send("failed");
-        }
-        
-        var dbo = database.db(db.DB_NAME);
-        require('./app/routes') (app, database);
-        
-        
-    });
-    res.send()
-})
 
 app.get('/send', (req,res) => {
     MongoClient.connect(db.url, (err,database) => {
