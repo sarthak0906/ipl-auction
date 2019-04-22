@@ -37,12 +37,12 @@ app.get("/bid",(req,res)=>{
         require('./app/routes') (app, database);
         
         dbo.collection("ipl").findOneAndUpdate(
-            {"id": req.query.id},
+            {"name": req.query.name},
             { $inc: {"current_bid" : 500000} }
             );
         dbo.collection("ipl").findOneAndUpdate(
             {"_id": req.query.id},
-            { $set: {"team_bidding" : req.query.name} }
+            { $set: {"team_bidding" : req.query.team_name} }
         );
     });
     res.send("success");
