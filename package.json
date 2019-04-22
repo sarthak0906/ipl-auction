@@ -1,0 +1,17 @@
+{
+  "name": "ipl-auctions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "author": "aman",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongodb": "^2.2.36",
+    "nodemon": "^1.18.11"
+  }
+}

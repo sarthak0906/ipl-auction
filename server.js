@@ -1,0 +1,118 @@
+const express        = require('express');
+const MongoClient    = require('mongodb').MongoClient;
+const bodyParser     = require('body-parser');
+const db             = require('./config/db');
+const port           = process.env.PORT || 3000;
+const app            = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// MongoClient.connect(db.url, {useNewUrlParser: true}, (err, client) =>{
+//     if (err) return console.log(err)
+
+//     database   = client.db(db.DB_NAME);
+//     collection = database.collection("ipl");
+//     console.log("connected to database   : " + db.DB_NAME);
+// })
+
+MongoClient.connect( db.url , (err, database) => {
+    if (err) return console.log(err);
+    database = database.db(db.DB_NAME);
+    require('./app/routes') (app, database);
+    
+    console.log("connected to mongo")
+});
+
+require('./app/routes') (app, {});
+app.listen(port, () =>{
+    console.log('we are live on ' + port);
+});
+
+app.get("/bid",(req,res)=>{
+    console.log(req.query);
+
+    MongoClient.connect(db.url, (err,database) => {
+        if (err){
+            console.log(err);
+            res.send("failed");
+        }
+        
+        var dbo = database.db(db.DB_NAME);
+        require('./app/routes') (app, database);
+        
+        dbo.collection("ipl").findOneAndUpdate(
+            {"_id": req.query.id},
+            { $inc: {"current_bid" : 500000} }
+        );
+        dbo.collection("ipl").findOneAndUpdate(
+            {"_id": req.query.id},
+            { $set: {"team_bidding" : req.query.name} }
+        );
+    });
+});
+
+app.get('/batsman', (req,res) => {
+    MongoClient.connect(db.url, (err,database) => {
+        if (err){
+            console.log(err);
+            res.send("failed");
+        }
+        
+        var dbo = database.db(db.DB_NAME);
+        require('./app/routes') (app, database);
+        
+        
+    });
+    res.send()
+})
+
+app.get('/send', (req,res) => {
+    MongoClient.connect(db.url, (err,database) => {
+        if (err){
+            console.log(err);
+            res.send("failed");
+        }
+
+        var dbo = database.db(db.DB_NAME);
+        require('./app/routes') (app,database);
+
+        dbo.collection('ipl').find({}).toArray(function(err, result){
+            if (err){
+                console.log(err);
+                res.send("failed");
+            }
+
+            res.send(result);
+        })
+    })
+})
+
+
+app.get('/populate', (req, res) => {
+    MongoClient.connect(db.url, (err,database) => {
+        if (err){
+            console.log(err);
+            res.send("failed");
+        }
+        
+        var dbo = database.db(db.DB_NAME);
+        require('./app/routes') (app, database);
+        
+        var item = {"name": req.query.name,
+                    "nationality": req.query.nationality,
+                    "current_bid": req.query.current_bid,
+                    "base_price": req.query.base_price,
+                    "bowler": req.query.bowler,
+                    "batting": req.query.batting,
+                    "wk" : req.query.wk,
+                    "team_bidding": null,
+                    "image": req.query.image}
+        dbo.collection("ipl").insertOne(item, (err, res) => {
+            if (err){
+                console.log(err);
+                res.send("failed");
+            }
+            console.log("amazing");
+        });
+    });
+})
