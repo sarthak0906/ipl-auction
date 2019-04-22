@@ -37,7 +37,7 @@ app.get("/bid",(req,res)=>{
         require('./app/routes') (app, database);
         
         dbo.collection("ipl").findOneAndUpdate(
-            {"_id": req.query.id},
+            {"id": req.query.id},
             { $inc: {"current_bid" : 500000} }
             );
         dbo.collection("ipl").findOneAndUpdate(
@@ -82,9 +82,10 @@ app.get('/populate', (req, res) => {
         var dbo = database.db(db.DB_NAME);
         require('./app/routes') (app, database);
         
-        var item = {"name": req.query.name,
+        var item = {"id" : req.query.id,
+                    "name": req.query.name,
                     "nationality": req.query.nationality,
-                    "current_bid": req.query.current_bid,
+                    "current_bid": parseInt(req.query.current_bid),
                     "base_price": req.query.base_price,
                     "bowler": req.query.bowler,
                     "batting": req.query.batting,
@@ -97,7 +98,7 @@ app.get('/populate', (req, res) => {
                 res.send("failed");
             }
             console.log("amazing");
-            res.send("success");
         });
     });
+    res.send("success");
 })
