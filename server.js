@@ -45,7 +45,7 @@ app.get("/bid",(req,res)=>{
             { $set: {"team_bidding" : req.query.name} }
         );
     });
-    res,send("success");
+    res.send("success");
 });
         
 app.get('/send', (req,res) => {
